@@ -76,8 +76,8 @@ Signal handlers can be specified for all but two signals (SIGKILL and SIGSTOP),
 which cannot be caught, blocked or ignored. 
 
 ** SIGACTION
-    int sigaction(int _signum_, const struct sigaction *_act_,
-                  struct sigaction *_oldact_); 
+    int sigaction(int _signum_, const struct sigaction _*act_,
+                  struct sigaction _*oldact_); 
 
 The sigaction() system call is used to change the action taken by a process on receipt
 of a specific signal.
