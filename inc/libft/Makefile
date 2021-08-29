@@ -20,6 +20,8 @@ SRCS	=	ft_add_char.c		\
 		ft_char_isascii.c	\
 		ft_char_isdigit.c	\
 		ft_char_rep_count.c	\
+		ft_intlen.c		\
+		ft_itoa.c		\
 		ft_memdel.c		\
 		ft_memdel_strptr.c	\
 		ft_putstr_fd.c		\
@@ -34,6 +36,7 @@ SRCS	=	ft_add_char.c		\
 		ft_strlcpy.c		\
 		ft_strlen.c		\
 		ft_strnlen.c		\
+		ft_strrev.c		\
 		get_next_line.c
 
 OBJS	=	${SRCS:.c=.o}
