@@ -50,7 +50,6 @@ bool	ft_str_isnum(const char *str);
 char	*ft_add_char(char *src, char to_add);
 void	ft_bzero(char *str);
 uint8_t	ft_char_rep_count(char c, const char *str);
-void	ft_putstr_fd(int fd, char *str);
 char	**ft_split(const char *src, char sep);
 size_t	ft_strcat(const char *src, char *dst);
 int		ft_strchr(const char *str, char to_find);
@@ -62,9 +61,16 @@ size_t	ft_strnlen(const char *str, size_t n);
 void	ft_strrev(char *str);
 
 /*
+** PRINTING
+*/
+void	ft_putstr_fd(char *str, int fd);
+void	ft_putnbr_fd(int n, int fd);
+void	ft_putchar_fd(char c, int fd);
+
+/*
 ** INT STUFF
 */
-int	ft_intlen(long n);
+int		ft_intlen(long n);
 
 /*
 ** OTHERS

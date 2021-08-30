@@ -3,17 +3,15 @@
 |------------------------------------------+---------------+--------+-----|
 | TASK                                     | NOTES         | STATUS | T/P |
 |------------------------------------------+---------------+--------+-----|
-| executables names                        | client/server | DONE   | P   |
+| client sends string                      |               | DONE   | PT  |
 |------------------------------------------+---------------+--------+-----|
-| client sends string                      |               | DONE   | P   |
+| server prints string                     |               | DONE   | PT  |
 |------------------------------------------+---------------+--------+-----|
-| server prints string                     |               | DONE   | P   |
+| --> server prints wrong char soemtimes   |               | WIP    |     |
 |------------------------------------------+---------------+--------+-----|
-| server can receive from multiple clients |               | WIP    |     |
+| server can receive from multiple clients |               | DONE   | P   |
 |------------------------------------------+---------------+--------+-----|
-| error management if server/client is INT |               |        |     |
-|------------------------------------------+---------------+--------+-----|
-| norme                                    |               |        |     |
+| error management if server/client is INT |               | DONE   | PT  |
 |------------------------------------------+---------------+--------+-----|
 |                                          |               |        |     |
 
@@ -31,11 +29,32 @@
 |------------------------------+--------------+--------+-----|
 
 ** correction stuff
-|-------+---------------------------+--------+-----|
-| TASK  | NOTES                     | STATUS | T/P |
-|-------+---------------------------+--------+-----|
-| norm  |                           |        |     |
-|-------+---------------------------+--------+-----|
-| leaks | check for error cases too |        |     |
-|-------+---------------------------+--------+-----|
-
+|------------------------------------------------------------------------------+-----|
+| TASK                                                                         | T/P |
+|------------------------------------------------------------------------------+-----|
+| norm                                                                         |     |
+|------------------------------------------------------------------------------+-----|
+| leaks                                                                        |     |
+|------------------------------------------------------------------------------+-----|
+| you must create a communication program in the form of a client and server   | Y   |
+|------------------------------------------------------------------------------+-----|
+| the server must be launched first, and after being launched it must display  | Y   |
+| its PID                                                                      |     |
+|------------------------------------------------------------------------------+-----|
+| the client will take as parameters:                                          | Y   |
+| -the server PID                                                              |     |
+| -the string that should be sent                                              |     |
+|------------------------------------------------------------------------------+-----|
+| the client must communicate the string passed as a parameter to the server   | Y   |
+| once the string has been received, the server must display it                |     |
+|------------------------------------------------------------------------------+-----|
+| Communication between your programs should ONLY be done using UNIX signals   | Y   |
+|------------------------------------------------------------------------------+-----|
+| the server must be able to display the string pretty quickly                 | Y   |
+| (1 second for 100 chars is COLOSSAL)                                         |     |
+|------------------------------------------------------------------------------+-----|
+| your server should be able to receive strings from several clients in a row, | Y   |
+| without needing to be restarted                                              |     |
+|------------------------------------------------------------------------------+-----|
+| you can only use the two signals SIGUSR1 and SIGUSR2                         | Y   |
+|------------------------------------------------------------------------------+-----|

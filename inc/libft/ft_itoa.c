@@ -22,7 +22,8 @@ char	*ft_itoa(int num)
 	tmp = num;
 	i = 0;
 	len = ft_intlen(tmp);
-	if (!(dst = (char *)malloc(len + 1)))
+	dst = (char *)malloc(len + 1);
+	if (!dst)
 		return (NULL);
 	if (tmp < 0)
 		tmp *= -1;

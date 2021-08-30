@@ -3,7 +3,8 @@ CLIENT			=	client
 
 SRC_PATH		= 	./srcs
 SRC_NAME		=	server.c	\
-				client.c
+				client.c	\
+				utils.c
 
 OBJ_PATH = objs
 OBJ_NAME = $(SRC_NAME:.c=.o)
@@ -24,12 +25,12 @@ LDFLAGS		=	inc/libft/libft.a
 
 all: $(SERVER) $(CLIENT)
 
-$(SERVER): objs/server.o
+$(SERVER): objs/server.o objs/utils.o
 	@make -C inc/libft  2> /dev/null || true
 	@$(CC) $(CFLAGS) $(LDFLAGS) -o $(SERVER) $^ $(LDFLAGS)
 	@echo "Server compilation \033[1;32mOK\033[m"
 
-$(CLIENT): objs/client.o
+$(CLIENT): objs/client.o  objs/utils.o
 	@make -C inc/libft  2> /dev/null || true
 	@$(CC) $(CFLAGS) $(LDFLAGS) -o $(CLIENT) $^ $(LDFLAGS)
 	@echo "Client compilation \033[1;32mOK\033[m"

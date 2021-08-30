@@ -24,6 +24,8 @@ SRCS	=	ft_add_char.c		\
 		ft_itoa.c		\
 		ft_memdel.c		\
 		ft_memdel_strptr.c	\
+		ft_putchar_fd.c		\
+		ft_putnbr_fd.c		\
 		ft_putstr_fd.c		\
 		ft_realloc.c		\
 		ft_split.c		\

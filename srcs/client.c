@@ -1,30 +1,26 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <stdlib.h>
-#include "../inc/libft/libft.h"
+#include "../inc/minitalk.h"
 
 static void	cerror(char *err_str)
 {
-	ft_putstr_fd(1, "[CLIENT] encountered an error!\n\tIssue: ");
-	ft_putstr_fd(1, err_str);
-	ft_putstr_fd(1, ".\n");
-	perror("perror says");
+	ft_putstr_fd("[CLIENT] encountered an error! Issue: ", 1);
+	ft_putstr_fd(err_str, 1);
+	ft_putstr_fd(".\n", 1);
+	perror("\tperror says");
 	exit(EXIT_FAILURE);
 }
 
-static int	send_null(int pid, char *str)
-{
-	static int	i = 0;
+/* static int	send_null(int pid, char *str) */
+/* { */
+/* 	static int	i = 0; */
 
-	if (i++ != 8)
-	{
-		if (kill(pid, SIGUSR1) == -1)
-			cerror(str);
-		return (0);
-	}
-	return (1);
-}
+/* 	if (i++ != 8) */
+/* 	{ */
+/* 		if (kill(pid, SIGUSR1) == -1) */
+/* 			cerror(str); */
+/* 		return (0); */
+/* 	} */
+/* 	return (1); */
+/* } */
 
 static int	send_bit(char *str, pid_t pid)
 {
@@ -55,10 +51,16 @@ static int	send_bit(char *str, pid_t pid)
 		}
 		return (0);
 	}
-	if (!send_null(server, mess))
+	if (bit >= 0)
+	{
+		if (kill(server, SIGUSR1) < 0)
+			cerror("couldn't contact server");
+		bit--;
 		return (0);
+	}
+	printf("\n");
 	ft_memdel(mess);
-	return (1);	
+	return (1);
 }
 
 static void	signal_handler(int sig, __attribute__((unused))siginfo_t *info,
@@ -69,13 +71,11 @@ static void	signal_handler(int sig, __attribute__((unused))siginfo_t *info,
 	check = 0;
 	if (sig == SIGUSR1)
 		check = send_bit(NULL, 0);
-	else if (sig == SIGUSR2)
+	if (sig == SIGUSR2)
 		cerror("server ran into an issue..");
-	else if (sig == SIGTERM)
-		exit(0);
 	if (check)
 	{
-		printf("she's done\n");
+		ft_putstr_fd("[CLIENT] string was received successfully. job is done :)\n", 1);
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -84,23 +84,21 @@ int	main(int ac, char **av)
 {
 	pid_t	server_pid;
 	struct sigaction	sig;
-	sigset_t			block_mask;
 
 	if (ac != 3)
 		cerror("wrong  number of arguments");
 	server_pid = ft_atoi(av[1]);
-	if (kill(server_pid, 0) == -1)
+	if (kill(server_pid, 0) == -1 || server_pid == 0)
 		cerror("wrong pid or permissions");
-
-	sigemptyset(&block_mask);
-	sigaddset(&block_mask, SIGINT);
-	sigaddset(&block_mask, SIGQUIT);
 	sig.sa_sigaction = &signal_handler;
-	sig.sa_flags = SA_SIGINFO;
-	send_bit(av[2], server_pid);
+	sig.sa_mask = (sigset_t){};
+	sig.sa_flags = SA_SIGINFO | SA_NODEFER;
 	sigaction(SIGUSR1, &sig, NULL);
 	sigaction(SIGUSR2, &sig, NULL);
-	sigaction(SIGINT, &sig, NULL);
+	signal(SIGINT, kill_handler);
+	signal(SIGTERM, kill_handler);
+	signal(SIGQUIT, kill_handler);
+	send_bit(av[2], server_pid);
 	while (420)
 		sleep(69);
 	return (0);
