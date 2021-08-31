@@ -18,15 +18,18 @@ static void	serror(char *str, char *err_str, pid_t pid)
 		kill(pid, SIGUSR2);
 	ft_putstr_fd("[SERVER] encountered an error! Issue: ", 1);
 	ft_putstr_fd(err_str, 1);
-	ft_putstr_fd(".\n", 1);
 	perror("\tperror says");
 	exit(EXIT_FAILURE);
 }
 
-static char	*add_byte(char *str, char byte)
+static char	*add_byte(char *str, char byte, pid_t pid)
 {
 	if (str == NULL)
+	{
 		str = ft_strdup("");
+		if (!str)
+			serror(str, "allocation error.\n", pid);
+	}
 	if (byte == '\0')
 	{
 		ft_putstr_fd(str, 1);
@@ -59,11 +62,11 @@ static void	signal_handler(int sig, siginfo_t *info,
 	}
 	if (bit == 8)
 	{
-		str = add_byte(str, byte);
+		str = add_byte(str, byte, client_pid);
 		reset(NULL, &bit, &byte);
 	}
 	if (kill(info->si_pid, SIGUSR1) < 0)
-		serror(str, "couldn't contact client", info->si_pid);
+		serror(str, "couldn't contact client.\n", client_pid);
 }
 
 int	main(void)

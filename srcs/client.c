@@ -3,7 +3,10 @@
 static void	cerror(char *err_str, char *message)
 {
 	if (message)
+	{
 		free(message);
+		message = NULL;
+	}
 	ft_putstr_fd("[CLIENT] encountered an error! Issue: ", 1);
 	ft_putstr_fd(err_str, 1);
 	perror("\tperror says");
@@ -14,24 +17,29 @@ static bool	send_null_byte(pid_t pid)
 {
 	static uint8_t i = 0;
 
-	if (i < 8)
+	if (i++ < 8)
 	{
 		if (kill(pid, SIGUSR1) < 0)
 			cerror("could not contact server.\n", NULL);
-		i++;
 		return (false);
 	}
 	return (true);
 }
 
-int	send_bit(char *str, int pid)
+static bool	send_bit(char *str, int pid, bool panic)
 {
 	static char	*message = 0;
 	static int	bit = -1;
 
 	if (str)
 		message = ft_strdup(str);
-	if (!message || !pid)
+	if (panic == true)
+	{
+		free(message);
+		message = NULL;
+		cerror("f.\n", NULL);
+	}
+	if (message == NULL)
 		cerror("could not contact server.\n", message);
 	if (message[++bit / 8])
 	{
@@ -42,32 +50,34 @@ int	send_bit(char *str, int pid)
 		}
 		else if (kill(pid, SIGUSR1) == -1)
 			cerror("could not contact server.\n", message);
-		return (0);
+		return (false);
 	}
+	if (send_null_byte(pid) == false)
+		return (false);
 	free(message);
-	return (1);
+	return (true);
 }
 
-static void	signal_handler(int sig, __attribute__((unused))siginfo_t *info,
+static void	signal_handler(int sig, siginfo_t *info,
 			__attribute__((unused))void *context)
 {
 	static bool	done = false;
 
 	if (sig == SIGUSR1 && done == false)
-		done = send_bit(NULL, info->si_pid);
-	if (sig == SIGUSR1 && done == true && send_null_byte(info->si_pid) == true)
+		done = send_bit(NULL, info->si_pid, false);
+	if (sig == SIGUSR1 && done == true)
 	{
-		ft_putstr_fd("[CLIENT] server has successfully received your \
+		if (send_null_byte(info->si_pid) == true)
+		{
+			ft_putstr_fd("[CLIENT] server has successfully received your \
 message. :)\n", 1);
-		exit(EXIT_SUCCESS);		
+			exit(EXIT_SUCCESS);		
+		}
 	}
 	if (sig == SIGUSR2)
-		send_bit(NULL, 0);
-	if (sig == SIGQUIT)
-		exit(0);
-	if (done == true)
-	{
-	}
+		send_bit(NULL, 0, true);
+	if (sig == SIGINT)
+		send_bit(NULL, 0, true);
 }
 
 int	main(int ac, char **av)
@@ -86,7 +96,7 @@ int	main(int ac, char **av)
 		sig.sa_flags = SA_SIGINFO | SA_NODEFER;
 		sigaction(SIGUSR1, &sig, NULL);
 		sigaction(SIGUSR2, &sig, NULL);
-		send_bit(av[2], server_pid);
+		send_bit(av[2], server_pid, false);
 		while (420)
 			sleep(69);
 	}
