@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: challeau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/31 23:13:10 by challeau          #+#    #+#             */
+/*   Updated: 2021/08/31 23:13:10 by challeau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minitalk.h"
 
 static void	cerror(char *err_str, char *message)
@@ -15,7 +27,7 @@ static void	cerror(char *err_str, char *message)
 
 static bool	send_null_byte(pid_t pid)
 {
-	static uint8_t i = 0;
+	static uint8_t	i = 0;
 
 	if (i++ < 8)
 	{
@@ -33,14 +45,15 @@ static bool	send_bit(char *str, int pid, bool panic)
 
 	if (str)
 		message = ft_strdup(str);
-	if (panic == true)
+	if (panic == true || !message)
 	{
-		free(message);
-		message = NULL;
-		cerror("f.\n", NULL);
+		if (message)
+		{
+			free(message);
+			message = NULL;
+		}
+		cerror("could not contact server.\n", NULL);
 	}
-	if (message == NULL)
-		cerror("could not contact server.\n", message);
 	if (message[++bit / 8])
 	{
 		if (message[bit / 8] & (0x80 >> bit % 8))
@@ -71,7 +84,7 @@ static void	signal_handler(int sig, siginfo_t *info,
 		{
 			ft_putstr_fd("[CLIENT] server has successfully received your \
 message. :)\n", 1);
-			exit(EXIT_SUCCESS);		
+			exit(EXIT_SUCCESS);
 		}
 	}
 	if (sig == SIGUSR2)
@@ -82,11 +95,11 @@ message. :)\n", 1);
 
 int	main(int ac, char **av)
 {
-	pid_t			server_pid;
+	pid_t				server_pid;
 	struct sigaction	sig;
 
 	if (ac == 3 && ft_str_isnum(av[1]) == true
-	    && ft_str_isprint(av[1]) == true)
+		&& ft_str_isprint(av[1]) == true)
 	{
 		server_pid = ft_atoi(av[1]);
 		if (kill(server_pid, 0) == -1 || server_pid == 0)

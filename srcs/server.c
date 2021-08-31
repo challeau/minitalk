@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: challeau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/08/31 22:00:36 by challeau          #+#    #+#             */
+/*   Updated: 2021/08/31 22:00:36 by challeau         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minitalk.h"
 
 static void	clean_exit(pid_t pid, char *str)
@@ -45,7 +57,7 @@ static void	signal_handler(int sig, siginfo_t *info,
 {
 	static uint8_t		bit = 0;
 	static uint8_t		byte = 0;
-	static char		*str = NULL;
+	static char			*str = NULL;
 	static pid_t		client_pid = 0;
 
 	if (sig == SIGINT)
@@ -86,4 +98,3 @@ int	main(void)
 		sleep(69);
 	return (0);
 }
-
