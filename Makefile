@@ -23,7 +23,9 @@ CPPFLAGS	=	-I inc/libft/
 
 LDFLAGS		=	inc/libft/libft.a
 
-all: $(SERVER) $(CLIENT)
+all: $(NAME)
+
+$(NAME): $(SERVER) $(CLIENT)
 
 $(SERVER): objs/server.o objs/utils.o
 	@make -C inc/libft  2> /dev/null || true
