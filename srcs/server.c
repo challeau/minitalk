@@ -45,6 +45,7 @@ static void	signal_handler(int sig, siginfo_t *info,
 	static char		*str = NULL;
 	static pid_t		client_pid = 0;
 
+	printf("heehee\n");
 	if (sig == SIGINT)
 		clean_exit(client_pid, str);
 	if (sig == SIGUSR1 || sig == SIGUSR2)

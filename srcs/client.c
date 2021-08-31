@@ -24,34 +24,6 @@ static bool	send_null_byte(pid_t pid)
 	return (true);
 }
 
-/* static bool	send_bit(char *str, pid_t pid) */
-/* { */
-/* 	static uint8_t	bit = 0; */
-/* 	static int	byte = 0; */
-/* 	static char	*message = NULL; */
-
-/* 	if (str) */
-/* 		message = ft_strdup(str); */
-/* 	while(message[byte]) */
-/* 	{ */
-/* 		if (((message[byte] >> bit) & 0x01) == 0) */
-/* 		{ */
-/* 			if (kill(pid, SIGUSR1) < 0) */
-/* 				cerror("could not contact server.\n"); */
-/* 		} */
-/* 		else if (kill(pid, SIGUSR2) < 0) */
-/* 			cerror("could not contact server.\n"); */
-/* 		bit++; */
-/* 		if (bit == 8) */
-/* 		{ */
-/* 			byte++; */
-/* 			bit = 8; */
-/* 		} */
-/* 	} */
-/* 	ft_memdel(message); */
-/* 	return (true); */
-/* } */
-
 int	send_bit(char *str, int pid)
 {
 	static char	*message = 0;
