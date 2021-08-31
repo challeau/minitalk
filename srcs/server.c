@@ -30,6 +30,7 @@ static char	*add_byte(char *str, char byte)
 	if (byte == '\0')
 	{
 		ft_putstr_fd(str, 1);
+		ft_putstr_fd("\n", 1);
 		free(str);
 		return (NULL);
 	}
@@ -40,7 +41,7 @@ static void	signal_handler(int sig, siginfo_t *info,
 			__attribute__((unused))void *context)
 {
 	static uint8_t		bit = 0;
-	static char		byte = 0;
+	static uint8_t		byte = 0;
 	static char		*str = NULL;
 	static pid_t		client_pid = 0;
 
@@ -48,6 +49,8 @@ static void	signal_handler(int sig, siginfo_t *info,
 		clean_exit(client_pid, str);
 	if (sig == SIGUSR1 || sig == SIGUSR2)
 	{
+		if (client_pid > 0 && client_pid != info->si_pid)
+			reset(&str, &bit, &byte);
 		client_pid = info->si_pid;
 		byte <<= 1;
 		if (sig == SIGUSR2)
@@ -57,18 +60,10 @@ static void	signal_handler(int sig, siginfo_t *info,
 	if (bit == 8)
 	{
 		str = add_byte(str, byte);
-		bit = 0;
-		byte = 0;
+		reset(NULL, &bit, &byte);
 	}
 	if (kill(info->si_pid, SIGUSR1) < 0)
 		serror(str, "couldn't contact client", info->si_pid);
-}
-
-static void print_pid(pid_t pid)
-{
-	ft_putstr_fd("[SERVER] pid: ", 1);
-	ft_putnbr_fd(pid, 1);
-	ft_putstr_fd("\n", 1);
 }
 
 int	main(void)
