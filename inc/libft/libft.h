@@ -43,6 +43,7 @@ bool	ft_char_isalpha(int c);
 bool	ft_char_isascii(int c);
 bool	ft_char_isdigit(int c);
 bool	ft_str_isnum(const char *str);
+bool	ft_str_isprint(const char *str);
 
 /*
 ** STR MANIPULATION

@@ -30,6 +30,7 @@ SRCS	=	ft_add_char.c		\
 		ft_realloc.c		\
 		ft_split.c		\
 		ft_str_isnum.c		\
+		ft_str_isprint.c	\
 		ft_strcat.c 		\
 		ft_strchr.c		\
 		ft_strcmp.c		\
