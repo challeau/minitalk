@@ -25,6 +25,7 @@ CPPFLAGS	=	-I inc/libft/
 LDFLAGS		=	inc/libft/libft.a
 
 all: $(NAME)
+bonus: all
 
 $(NAME): $(SERVER) $(CLIENT)
 
