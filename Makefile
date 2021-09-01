@@ -1,3 +1,4 @@
+NAME			=	minitalk
 SERVER			=	server
 CLIENT			=	client
 
