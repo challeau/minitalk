@@ -19,8 +19,10 @@
 # include "libft/libft.h"
 
 /* UTILS */
-void	kill_handler(__attribute__((unused))int sig);
+void	kill_handler(int sig);
 void	reset(char **str, uint8_t *bit, uint8_t *byte);
 void	print_pid(pid_t pid);
+void	ft_panic(char *str);
+void	cerror(char *err_str, char *message);
 
 #endif

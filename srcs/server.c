@@ -60,7 +60,7 @@ static void	signal_handler(int sig, siginfo_t *info,
 	static char			*str = NULL;
 	static pid_t		client_pid = 0;
 
-	if (sig == SIGINT)
+	if (sig == SIGINT || sig == SIGSTOP || sig == SIGQUIT)
 		clean_exit(client_pid, str);
 	if (sig == SIGUSR1 || sig == SIGUSR2)
 	{
@@ -94,6 +94,7 @@ int	main(void)
 	sigaction(SIGUSR1, &sig, NULL);
 	sigaction(SIGUSR2, &sig, NULL);
 	sigaction(SIGINT, &sig, NULL);
+	sigaction(SIGQUIT, &sig, NULL);
 	while (420)
 		sleep(69);
 	return (0);

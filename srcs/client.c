@@ -12,19 +12,6 @@
 
 #include "../inc/minitalk.h"
 
-static void	cerror(char *err_str, char *message)
-{
-	if (message)
-	{
-		free(message);
-		message = NULL;
-	}
-	ft_putstr_fd("[CLIENT] encountered an error! Issue: ", 1);
-	ft_putstr_fd(err_str, 1);
-	perror("\tperror says");
-	exit(EXIT_FAILURE);
-}
-
 static bool	send_null_byte(pid_t pid)
 {
 	static uint8_t	i = 0;
@@ -46,15 +33,8 @@ static bool	send_bit(char *str, int pid, bool panic)
 	if (str)
 		message = ft_strdup(str);
 	if (panic == true || !message)
-	{
-		if (message)
-		{
-			free(message);
-			message = NULL;
-		}
-		cerror("could not contact server.\n", NULL);
-	}
-	if (message[++bit / 8])
+		ft_panic(message);
+	if (message && message[++bit / 8])
 	{
 		if (message[bit / 8] & (0x80 >> bit % 8))
 		{
@@ -89,8 +69,6 @@ message. :)\n", 1);
 	}
 	if (sig == SIGUSR2)
 		send_bit(NULL, 0, true);
-	if (sig == SIGINT)
-		send_bit(NULL, 0, true);
 }
 
 int	main(int ac, char **av)
@@ -109,6 +87,8 @@ int	main(int ac, char **av)
 		sig.sa_flags = SA_SIGINFO | SA_NODEFER;
 		sigaction(SIGUSR1, &sig, NULL);
 		sigaction(SIGUSR2, &sig, NULL);
+		signal(SIGINT, kill_handler);
+		signal(SIGQUIT, kill_handler);
 		send_bit(av[2], server_pid, false);
 		while (420)
 			sleep(69);
