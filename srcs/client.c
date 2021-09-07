@@ -12,6 +12,9 @@
 
 #include "../inc/minitalk.h"
 
+/*
+** sends a null byte bit by bit.
+*/
 static bool	send_null_byte(pid_t pid)
 {
 	static uint8_t	i = 0;
@@ -25,6 +28,11 @@ static bool	send_null_byte(pid_t pid)
 	return (true);
 }
 
+/*
+** sends the next bit of the message to the server.
+** if all bits of the message have been sent, send_bit() calls send_null_byte()
+** to signal the server it is done.
+*/
 static bool	send_bit(char *str, int pid, bool panic)
 {
 	static char	*message = 0;
@@ -51,6 +59,15 @@ static bool	send_bit(char *str, int pid, bool panic)
 	return (true);
 }
 
+
+/*
+** signal handling function for SIGUSR1 and SIGUSR2.
+** after sending the first bit in main(), the program waits for SIGUSR1 to send
+** the next bit. if send_bit() returns true, the string has been sent entirely and
+** we can exit the program cleanly.
+** if the program receives SIGUSR2 then the server has encountered an issue and we
+** exit. 
+ */
 static void	signal_handler(int sig, siginfo_t *info,
 			__attribute__((unused))void *context)
 {
@@ -68,6 +85,11 @@ message. :)\n", 1);
 		send_bit(NULL, 0, true);
 }
 
+/*
+** sets up sigaction() to handle reception of SIGUSR1 and SIGUSR2 and signal() to
+** handle SIGKILL and SIGINT.
+** sends the first bit of the string passed as argument to server. 
+ */
 int	main(int ac, char **av)
 {
 	pid_t				server_pid;

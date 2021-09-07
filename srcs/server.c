@@ -34,6 +34,10 @@ static void	serror(char *str, char *err_str, pid_t pid)
 	exit(EXIT_FAILURE);
 }
 
+/*
+** apends a byte to a string.
+** if said byte is null, print the string.
+*/
 static char	*add_byte(char *str, char byte, pid_t pid)
 {
 	if (str == NULL)
@@ -52,6 +56,13 @@ static char	*add_byte(char *str, char byte, pid_t pid)
 	return (ft_add_char(str, byte));
 }
 
+/*
+** signal handling function for SIGUSR1, SIGUSR2, SIGINT AND SIGKILL.
+** if the program receives SIGINT, SIGKILL or SIGSTOP, then exit cleanly.
+** if it receives SIGUSR1 or SIGUSR2, add a bit to the buffer byte (0 or 1 respectively).
+** upon reception of 8 bits, the now full byte is added to str, and printed if
+** byte is '\0'. 
+ */
 static void	signal_handler(int sig, siginfo_t *info,
 			__attribute__((unused))void *context)
 {
@@ -81,6 +92,9 @@ static void	signal_handler(int sig, siginfo_t *info,
 		serror(str, "couldn't contact client.\n", client_pid);
 }
 
+/*
+** sets up sigaction() to handle reception of SIGUSR1, SIGUSR2, SIGKILL and SIGSTOP.
+ */
 int	main(void)
 {
 	struct sigaction	sig;
