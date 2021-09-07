@@ -56,16 +56,13 @@ static void	signal_handler(int sig, siginfo_t *info,
 {
 	static bool	done = false;
 
-	if (sig == SIGUSR1 && done == false)
+	if (sig == SIGUSR1)
 		done = send_bit(NULL, info->si_pid, false);
-	if (sig == SIGUSR1 && done == true)
+	if (done == true)
 	{
-		if (send_null_byte(info->si_pid) == true)
-		{
-			ft_putstr_fd("[CLIENT] server has successfully received your \
+		ft_putstr_fd("[CLIENT] server has successfully received your \
 message. :)\n", 1);
-			exit(EXIT_SUCCESS);
-		}
+		exit(EXIT_SUCCESS);
 	}
 	if (sig == SIGUSR2)
 		send_bit(NULL, 0, true);
