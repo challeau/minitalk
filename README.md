@@ -1,7 +1,7 @@
 # minitalk
 > grade: 125/100
 
-A simple communication project based on UNIX signals.<br\>
+A simple communication project based on UNIX signals.<br/>
 The program `client` sends a character string to the program `server` using only SIGUSR1 and SIGUSR2. The server then prints the received string.
 
 ## Usage: 
@@ -16,7 +16,7 @@ _Note: several clients can send strings to the same server. Supports Unicode._
 # minitalk - Français
 > note: 125/100
 
-Un projet de communication simple basé sur les signaux UNIX.<br\>
+Un projet de communication simple basé sur les signaux UNIX.<br/>
 Le programme `client` envoie une chaîne de caractères au programme `server`, en utilisant uniquement les signaux SIGUSR1 et SIGUSR2. Le serveur imprime la chaîne qu'il reçoit.
 
 ## Utilisation: 
